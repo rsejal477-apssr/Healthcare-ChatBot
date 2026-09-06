@@ -48,6 +48,9 @@ It does not replace professional medical advice, diagnosis, or treatment.
 
 In case of a medical emergency, please contact your local emergency medical services or consult a qualified healthcare professional.
 
+🌐 **Live Website:** 
+https://healthcare-chatbot-scsb.onrender.com/
+
 ## 🏗️ Project Structure
 
 ```text
