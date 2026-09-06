@@ -266,6 +266,7 @@
         <button class="clear-button" onclick="clearChat()">🗑️ Clear Chat</button>
         <button class="clear-button" onclick="showHistory()">📜 Chat History</button>
         <button class="clear-button" onclick="deleteChatHistory()">🗑️ Delete History</button>
+        <button class="clear-button" onclick="logout()">🚪 Logout</button>
     </div>
 
     <div id="chatBox">
@@ -462,6 +463,27 @@
             console.error("Error loading chat history:", error);
         }
     }
+    async function logout() {
+        try {
+            const response = await fetch("/logout", {
+                method: "POST"
+            });
+
+            const result = await response.text();
+
+            if (response.ok) {
+                alert(result);
+                window.location.href = "/login.html";
+            } else {
+                alert("Logout failed.");
+            }
+
+        } catch (error) {
+            console.error("Logout error:", error);
+            alert("Could not logout.");
+        }
+    }
+
     async function showHistory() {
         const historySection = document.getElementById("historySection");
 
@@ -489,6 +511,7 @@
             console.error("Error deleting chat history:", error);
             alert("Could not delete chat history.");
         }
+
     }
     
 </script>

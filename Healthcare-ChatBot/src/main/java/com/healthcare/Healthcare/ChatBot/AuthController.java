@@ -37,4 +37,9 @@ public class AuthController {
                 })
                 .orElse("Invalid email or password.");
     }
+    @PostMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "Logout successful.";
+    }
 }

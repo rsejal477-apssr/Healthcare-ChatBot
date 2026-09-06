@@ -141,8 +141,16 @@ public class ChatBotController {
         return chatMessageRepository.findByUserEmailOrderByTimestampAsc(userEmail);
     }
     @DeleteMapping("/chat/history")
-    public String deleteChatHistory() {
-        chatMessageRepository.deleteAll();
+    public String deleteChatHistory(HttpSession session) {
+
+        String userEmail = (String) session.getAttribute("userEmail");
+
+        if (userEmail == null) {
+            return "Please login first.";
+        }
+
+        chatMessageRepository.deleteByUserEmail(userEmail);
+
         return "Chat history deleted successfully.";
     }
 }
