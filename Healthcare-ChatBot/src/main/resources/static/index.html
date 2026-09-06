@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare ChatBot</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd, #f1f8e9);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .chat-container {
+            width: 680px;
+            max-width: 90vw;
+            height: 760px;
+            min-height: 0;
+            margin: 20px auto;
+            padding-top: 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: #1976d2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            font-size: 14px;
+        }
+
+        #chatBox {
+            flex: none;
+            height: 300px;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f8fbff;
+        }
+        .clear-button {
+            margin-top: 10px;
+            padding: 7px 14px;
+            border: none;
+            border-radius: 15px;
+            background: white;
+            color: #1976d2;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .clear-button:hover {
+            background: #e3f2fd;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 8px 15px;
+            border-radius: 15px;
+            max-width: 85%;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        .disclaimer {
+            padding: 8px 15px;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: #666;
+            background: #fff8e1;
+            border-top: 1px solid #eee;
+        }
+        .footer {
+            text-align: center;
+            padding: 8px;
+            font-size: 10px;
+            color: #777;
+            background: #f8fbff;
+            border-top: 1px solid #eee;
+        }
+
+        .bot {
+            background: #e3f2fd;
+            color: #222;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .user {
+            background: #1976d2;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 10px 15px;
+            background: white;
+            justify-content: center;
+        }
+
+        .quick-buttons button {
+            white-space: nowrap;
+            padding: 8px 12px;
+            border: 1px solid #1976d2;
+            border-radius: 20px;
+            background: white;
+            color: #1976d2;
+            cursor: pointer;
+        }
+
+        .quick-buttons button:hover {
+            background: #1976d2;
+            color: white;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+            background: white;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        #sendButton {
+            margin-left: 10px;
+            padding: 13px 20px;
+            border: none;
+            border-radius: 10px;
+            background: #1976d2;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        #sendButton:hover {
+            background: #125ca3;
+        }
+
+        #sendButton:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+
+        .features span {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        /* Make quick health buttons compact */
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            margin: 4px 0;
+            padding: 0;
+        }
+
+        .quick-buttons button {
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 15px;
+            line-height: 1;
+            height: 24px;
+        }
+
+        /* Make disclaimer smaller */
+        .disclaimer {
+            font-size: 10px;
+            line-height: 1.2;
+            margin: 6px 10px;
+        }
+
+        /* Make Quick Health Tips compact */
+        .quick-tips {
+            margin: 2px 8px;
+            padding: 0;
+        }
+
+        .quick-tips h3 {
+            font-size: 12px;
+            margin: 2px 0;
+        }
+
+        .quick-tips p {
+            font-size: 9px;
+            line-height: 1.1;
+            margin: 1px 0;
+        }
+        /* Make Quick Health Tips very compact */
+        .health-tips {
+            margin: 4px 9px !important;
+            padding: 0 !important;
+        }
+
+        .health-tips h3 {
+            font-size: 14px !important;
+            margin: 3px 0 !important;
+            padding: 0 !important;
+        }
+
+        .health-tips p {
+            font-size: 11px !important;
+            line-height: 1.5 !important;
+            margin: 2px 0 !important;
+            padding: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="chat-container">
+
+    <div class="header">
+        <h1>🩺 Healthcare ChatBot</h1>
+        <p>Your AI-powered healthcare information assistant</p>
+        <div class="features">
+            <span>🤖 AI Powered</span>
+            <span>🛡️ Safe Guidance</span>
+            <span>⚡ Quick Responses</span>
+        </div>
+        <button class="clear-button" onclick="clearChat()">🗑️ Clear Chat</button>
+        <button class="clear-button" onclick="showHistory()">📜 Chat History</button>
+        <button class="clear-button" onclick="deleteChatHistory()">🗑️ Delete History</button>
+    </div>
+
+    <div id="chatBox">
+        <div class="message bot">
+            Hello! 👋 I'm your Healthcare ChatBot.
+            How can I help you today?
+        </div>
+    </div>
+    <div class="quick-buttons" style ="margin-top: 70px">
+        <button onclick="quickQuestion('I have a fever. What should I do?')">🤒 Fever</button>
+        <button onclick="quickQuestion('I have a headache. What should I do?')">🤕 Headache</button>
+        <button onclick="quickQuestion('I have a cold and cough. What should I do?')">🤧 Cold & Cough</button>
+        <button onclick="quickQuestion('Give me some healthy diet advice.')">🥗 Diet</button>
+        <button onclick="quickQuestion('How can I improve my sleep?')">💤 Sleep</button>
+        <button onclick="quickQuestion('How much water should I drink in a day?')">💧 Hydration</button>
+    </div>
+    <div style="height: 40px;"></div>
+    <div class="disclaimer">
+        ⚠️ <strong>Disclaimer:</strong> This chatbot provides general health
+        information and is not a substitute for professional medical advice.
+        In an emergency, contact local emergency services.
+    </div>
+    <div class="health-tips">
+        <h5>💡 Quick Health Tips</h5>
+        <p>💧 Stay hydrated • 🥗 Eat a balanced diet • 😴 Get enough sleep • 🏃 Stay active</p>
+    </div>
+    <div class="input-area">
+        <input
+                type="text"
+                id="messageInput"
+                placeholder="Type your health question..."
+                autocomplete="off">
+
+        <button id="sendButton" onclick="sendMessage()">
+            Send
+        </button>
+    </div>
+    <div class="footer">
+        🔒 Your questions are used only to provide chatbot responses.
+        <br>
+        Powered by Spring Boot + Gemini AI
+    </div>
+
+</div>
+
+<script>
+
+    async function sendMessage() {
+
+        const input = document.getElementById("messageInput");
+        const chatBox = document.getElementById("chatBox");
+        const sendButton = document.getElementById("sendButton");
+        sendButton.disabled = true;
+        sendButton.innerText = "Thinking...";
+
+        const message = input.value.trim();
+
+        if (message === "") {
+            return;
+        }
+        const emergencyKeywords = [
+            "chest pain",
+            "difficulty breathing",
+            "can't breathe",
+            "cannot breathe",
+            "severe bleeding",
+            "unconscious",
+            "seizure",
+            "stroke",
+            "suicide",
+            "severe allergic reaction"
+        ];
+
+        const isEmergency = emergencyKeywords.some(keyword =>
+            message.toLowerCase().includes(keyword)
+        );
+
+        if (isEmergency) {
+            const alertMessage = document.createElement("div");
+            alertMessage.className = "message bot";
+            alertMessage.textContent =
+                "🚨 EMERGENCY WARNING\n\n" +
+                "Your message may describe a medical emergency. " +
+                "Please contact your local emergency medical service " +
+                "or seek immediate medical attention.";
+            chatBox.appendChild(alertMessage);
+        }
+
+        // Show user message
+        const userMessage = document.createElement("div");
+        userMessage.className = "message user";
+        userMessage.textContent = message;
+        chatBox.appendChild(userMessage);
+
+        input.value = "";
+
+        // Disable button while waiting
+        sendButton.disabled = true;
+        sendButton.textContent = "Thinking...";
+
+        // Show temporary bot message
+        const botMessage = document.createElement("div");
+        botMessage.className = "message bot";
+        botMessage.textContent = "🤖 Healthcare ChatBot is typing...";
+        chatBox.appendChild(botMessage);
+
+
+
+        try {
+
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: message
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("Server error");
+            }
+
+            const reply = await response.text();
+
+            botMessage.textContent = reply;
+
+        } catch (error) {
+
+            botMessage.textContent =
+                "Sorry, something went wrong. Please try again.";
+
+        }
+
+        sendButton.disabled = false;
+        sendButton.textContent = "Send";
+
+
+    }
+
+    // Press Enter to send
+    document.getElementById("messageInput")
+        .addEventListener("keydown", function(event) {
+
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+
+        });
+    function quickQuestion(question) {
+        document.getElementById("messageInput").value = question;
+        sendMessage();
+    }
+    function clearChat() {
+        const chatBox = document.getElementById("chatBox");
+
+        chatBox.innerHTML = `
+        <div class="message bot">
+            Hello! 👋 I'm your Healthcare ChatBot.
+            How can I help you today?
+        </div>
+    `;
+        localStorage.removeItem("chatHistory");
+    }
+
+
+    window.addEventListener("load", loadChatHistory);
+    async function loadChatHistory() {
+        try {
+            const response = await fetch("/chat/history");
+            const history = await response.json();
+
+            const historyBox = document.getElementById("historyBox");
+
+            if (history.length === 0) {
+                historyBox.innerHTML = "No chat history found.";
+                return;
+            }
+
+            historyBox.innerHTML = "";
+
+            history.forEach(chat => {
+                historyBox.innerHTML += `
+                <div style="margin-bottom:15px; padding:10px; background:white; border-radius:10px;">
+                    <b>👤 You:</b> ${chat.userMessage}<br>
+                    <b>🤖 Bot:</b> ${chat.botResponse}<br>
+                    <small>🕒 ${chat.timestamp}</small>
+                </div>
+            `;
+            });
+
+        } catch (error) {
+            console.error("Error loading chat history:", error);
+        }
+    }
+    async function showHistory() {
+        const historySection = document.getElementById("historySection");
+
+        historySection.style.display = "block";
+
+        await loadChatHistory();
+    }
+    async function deleteChatHistory() {
+        if (!confirm("Are you sure you want to delete all chat history?")) {
+            return;
+        }
+
+        try {
+            const response = await fetch("/chat/history", {
+                method: "DELETE"
+            });
+
+            if (response.ok) {
+                alert("Chat history deleted successfully.");
+                loadChatHistory();
+            } else {
+                alert("Could not delete chat history.");
+            }
+        } catch (error) {
+            console.error("Error deleting chat history:", error);
+            alert("Could not delete chat history.");
+        }
+    }
+    
+</script>
+<div id="historySection" style="
+    display:none;
+    margin:15px;
+    padding:15px;
+    background:#f8fbff;
+    border-radius:12px;
+    border:1px solid #ddd;
+    max-height:700px;
+    overflow-y:auto;
+">
+    <h3>📜 Chat History</h3>
+    <div id="historyBox">
+        Loading history...
+    </div>
+</div>
+</body>
+</html>

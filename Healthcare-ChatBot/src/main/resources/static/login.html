@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Healthcare ChatBot - Login</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd, #f1f8e9);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            width: 380px;
+            padding: 35px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        h1 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+        }
+
+        input {
+            width: 90%;
+            padding: 13px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 97%;
+            padding: 13px;
+            margin-top: 15px;
+            background: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #125ca1;
+        }
+
+        a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <h1>🏥 Healthcare ChatBot</h1>
+    <p>Login to continue</p>
+
+    <input type="email" id="email" placeholder="Enter email">
+
+    <input type="password" id="password" placeholder="Enter password">
+
+    <button onclick="login()">Login</button>
+
+    <div id="message"></div>
+
+    <p>
+        Don't have an account?
+        <a href="signup.html">Create Account</a>
+    </p>
+
+</div>
+
+<script>
+
+    async function login() {
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        if (!email || !password) {
+            document.getElementById("message").innerText =
+                "Please enter email and password.";
+            return;
+        }
+
+        const response = await fetch("/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+
+        const result = await response.text();
+
+        if (result === "Login successful.") {
+            document.getElementById("message").innerText =
+                "Login successful!";
+
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 1000);
+
+        } else {
+            document.getElementById("message").innerText = result;
+        }
+    }
+
+</script>
+
+</body>
+</html>
