@@ -491,6 +491,9 @@
 
         await loadChatHistory();
     }
+    function backToChat() {
+        document.getElementById("historySection").style.display = "none";
+    }
     async function deleteChatHistory() {
         if (!confirm("Are you sure you want to delete all chat history?")) {
             return;
@@ -525,6 +528,11 @@
     max-height:700px;
     overflow-y:auto;
 ">
+
+
+    <button onclick="backToChat()" class="clear-button">
+        🏠 Back to Chat
+    </button>
     <h3>📜 Chat History</h3>
     <div id="historyBox">
         Loading history...

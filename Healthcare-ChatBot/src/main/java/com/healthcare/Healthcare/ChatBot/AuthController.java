@@ -1,16 +1,18 @@
 package com.healthcare.Healthcare.ChatBot;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @RestController
-@RequestMapping("")
 public class AuthController {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public AuthController(UserRepository userRepository) {
         this.userRepository = userRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     @PostMapping("/signup")
@@ -19,6 +21,8 @@ public class AuthController {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             return "Email already registered.";
         }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userRepository.save(user);
 
@@ -30,13 +34,17 @@ public class AuthController {
 
         return userRepository.findByEmail(user.getEmail())
                 .filter(existingUser ->
-                        existingUser.getPassword().equals(user.getPassword()))
+                        passwordEncoder.matches(
+                                user.getPassword(),
+                                existingUser.getPassword()
+                        ))
                 .map(existingUser -> {
                     session.setAttribute("userEmail", existingUser.getEmail());
                     return "Login successful.";
                 })
                 .orElse("Invalid email or password.");
     }
+
     @PostMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
