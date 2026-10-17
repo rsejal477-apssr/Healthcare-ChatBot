@@ -1,5 +1,8 @@
 # 🏥 Healthcare ChatBot 🤖
 
+🌐 **Live Website:** 
+https://healthcare-chatbot-scsb.onrender.com/
+
 An AI-powered healthcare chatbot that provides quick and helpful health-related guidance using Google Gemini.
 
 ## ✨ Features
@@ -47,6 +50,7 @@ The application currently supports:
 It does not replace professional medical advice, diagnosis, or treatment.
 
 In case of a medical emergency, please contact your local emergency medical services or consult a qualified healthcare professional.
+
 
 ## 🏗️ Project Structure
 
