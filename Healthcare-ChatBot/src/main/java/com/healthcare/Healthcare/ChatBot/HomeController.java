@@ -8,15 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @GetMapping("/")
-    public String home(HttpSession session) {
+    public String home() {
 
-        String userEmail =
-                (String) session.getAttribute("userEmail");
-
-        if (userEmail == null) {
             return "redirect:/login.html";
         }
-
-        return "redirect:/index.html";
-    }
 }
