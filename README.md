@@ -1,7 +1,7 @@
 # 🏥 Healthcare ChatBot 🤖
 
 🌐 **Live Website:** 
-https://healthcare-chatbot-scsb.onrender.com/
+https://healthcare-chatbot-2-2uc0.onrender.com
 
 An AI-powered healthcare chatbot that provides quick and helpful health-related guidance using Google Gemini.
 
